@@ -14,7 +14,7 @@ void main() {
   var obj = Personel.fromJson(myMap);
   var myAdres = obj.adres;
   myAdres!.map((e) {
-    print("${e.ilce}");
+    //print("${e.ilce}");
   }).toList();
 }
 

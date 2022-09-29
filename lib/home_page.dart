@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'page1.dart';
+
+import 'content_page.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -11,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page"),
+        title: const Text("Home Page"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -19,9 +22,12 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>Page1()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ContentPage()));
               },
-              child: Text('Sayfa 1 e git'),
+              child: const Text('Sayfa 1 e git'),
             ),
           ),
         ],
