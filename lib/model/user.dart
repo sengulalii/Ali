@@ -6,12 +6,14 @@ class User {
   Name? name;
   String? picture;
 
-  User({
-    required this.picture,
-  });
+  User({this.name, this.picture});
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
+      name: Name(
+        first: map["name"]["first"],
+        last: map["name"]["last"],
+      ),
       picture: map["picture"] != null ? map["picture"]["large"] : null,
     );
   }
