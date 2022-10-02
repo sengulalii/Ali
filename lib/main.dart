@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Başlık',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.orange,
       ),
       home: const HomePage(),
     );
