@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zoom_ders1/viewmodel/content_viewmodel.dart';
 
-import 'home_page.dart';
+import 'view/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Başlık',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
+    return ChangeNotifierProvider<ContentViewModel>(
+      create: (_) => ContentViewModel(),
+      child: MaterialApp(
+        title: 'Başlık',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.orange,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
