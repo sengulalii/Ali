@@ -1,11 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert' as convert;
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'model/name.dart';
 import 'model/user.dart';
 
 class ContentPage extends StatefulWidget {
@@ -99,7 +96,7 @@ class _ContentPageState extends State<ContentPage> {
         /*if (i == 1) {
           jsonResponse["results"][i]["picture"] = null;
         }*/
-        var currentUser = User.fromMap(jsonResponse["results"][i]);
+        var currentUser = User.fromJson(jsonResponse["results"][i]);
         users.add(currentUser);
       }
     } else {
@@ -131,8 +128,7 @@ class _ContentPageState extends State<ContentPage> {
                   : CircleAvatar(
                       backgroundImage: NetworkImage(users[index].picture!),
                     ),
-              title: Text(users[index].name!.first ?? "Hata"),
-              subtitle: Text(users[index].name!.last ?? "Hata"),
+              title: Text(users[index].picture ?? "Hata"),
             );
           });
     } else if (snapshot.hasError) {
