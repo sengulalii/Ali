@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+part 'name.g.dart';
+
+@JsonSerializable()
 class Name {
   String? first;
   String? last;

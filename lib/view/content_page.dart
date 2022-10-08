@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
+import '../helper/page_helper.dart';
 import '../viewmodel/content_viewmodel.dart';
 
 class ContentPage extends StatefulWidget {
@@ -15,106 +16,137 @@ class ContentPage extends StatefulWidget {
   State<ContentPage> createState() => _ContentPageState();
 }
 
-class _ContentPageState extends State<ContentPage> {
+class _ContentPageState extends State<ContentPage> with PageHelper {
+  //var color;
   @override
   void initState() {
+    printPageData("ContentPage");
     Provider.of<ContentViewModel>(context, listen: false).removeUsers();
-    Provider.of<ContentViewModel>(context, listen: false).get5Users();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ContentViewModel>(context, listen: false).get5Users();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var contentViewModel = Provider.of<ContentViewModel>(context, listen: true);
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Geri Git'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {});
-              },
-              icon: Icon(Icons.refresh),
-            ),
-            IconButton(
-              onPressed: () {
-                Provider.of<ContentViewModel>(context, listen: false)
-                    .removeLast();
-              },
-              icon: Icon(Icons.minimize_outlined),
-            ),
-            IconButton(
-              onPressed: () {
-                Provider.of<ContentViewModel>(context, listen: false)
-                    .clearUsers();
-              },
-              icon: Icon(Icons.cancel),
-            ),
-            IconButton(
-              onPressed: () {
-                Provider.of<ContentViewModel>(context, listen: false)
-                    .get10Users();
-              },
-              icon: Icon(Icons.download),
-            )
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /* Expanded(
-              child: FutureBuilder<String>(
-                future: setFuture1(),
-                builder: (_, AsyncSnapshot<String> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.active:
-                      return const Text('Bağlantı Aktif');
-                    case ConnectionState.done:
-                      return resultWidget(snapshot);
-                    case ConnectionState.waiting:
-                      return const Text('Bağlantı Bekliyor');
-                    case ConnectionState.none:
-                      return const Text('Bağlantı Yok');
-                  }
+    return WillPopScope(
+      onWillPop: () {
+        Provider.of<ContentViewModel>(context, listen: false)
+            .statusMap[Services.users5] = ServiceStatus.idle;
+        return Future.value(true);
+      },
+      child: Scaffold(
+          backgroundColor: color,
+          appBar: AppBar(
+            title: const Text('Geri Git'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    color = Colors.blue;
+                  });
                 },
+                icon: Icon(Icons.change_circle),
               ),
-            ),
-            */
-            Expanded(
-                child: ListView.builder(
-              itemCount: contentViewModel.users.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: contentViewModel.users[index].picture == null
-                      ? const Icon(Icons.image)
-                      : CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              contentViewModel.users[index].picture!),
-                        ),
-                  title: Text(contentViewModel.users[index].picture!),
-                );
-              },
-            )
+              IconButton(
+                onPressed: () {
+                  Provider.of<ContentViewModel>(context, listen: false)
+                      .removeLast();
+                },
+                icon: Icon(Icons.minimize_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  Provider.of<ContentViewModel>(context, listen: false)
+                      .clearUsers();
+                },
+                icon: Icon(Icons.cancel),
+              ),
+              IconButton(
+                onPressed: () {
+                  Provider.of<ContentViewModel>(context, listen: false)
+                      .get10Users();
+                },
+                icon: Icon(Icons.download),
+              )
+            ],
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              /*  Expanded(
+                  child: Column(
+                children: [],
+              )), */
+              Expanded(
+                child: (contentViewModel.statusMap[Services.users5] ==
+                        ServiceStatus.idle)
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : dataList(),
                 // TODO add radio button, mixin
 
                 /* FutureBuilder<String>(
-                future: setFuture2(),
-                builder: (_, AsyncSnapshot<String> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.active:
-                      return const Text('Bağlantı Aktif');
-                    case ConnectionState.done:
-                      return resultWidget2(snapshot);
-                    case ConnectionState.waiting:
-                      return const Text('Bağlantı Bekliyor');
-                    case ConnectionState.none:
-                      return const Text('Bağlantı Yok');
-                  }
-                },
-              ), */
+                  future: setFuture2(),
+                  builder: (_, AsyncSnapshot<String> snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.active:
+                        return const Text('Bağlantı Aktif');
+                      case ConnectionState.done:
+                        return resultWidget2(snapshot);
+                      case ConnectionState.waiting:
+                        return const Text('Bağlantı Bekliyor');
+                      case ConnectionState.none:
+                        return const Text('Bağlantı Yok');
+                    }
+                  },
+                ), */
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget dataWidget() {
+    var contentViewModel = Provider.of<ContentViewModel>(context, listen: true);
+
+    switch (contentViewModel.statusMap[Services.users5]) {
+      case ServiceStatus.inProgress:
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      case ServiceStatus.completed:
+        return dataList();
+      case ServiceStatus.error:
+        return const Center(
+          child: Icon(Icons.error),
+        );
+      case ServiceStatus.idle:
+      default:
+        return const SizedBox();
+    }
+  }
+
+  Widget dataList() {
+    var contentViewModel = Provider.of<ContentViewModel>(context, listen: true);
+
+    return ListView.builder(
+      itemCount: contentViewModel.users.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: contentViewModel.users[index].picture == null
+              ? const Icon(Icons.image)
+              : CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(contentViewModel.users[index].picture!),
                 ),
-          ],
-        ));
+          title: Text(contentViewModel.users[index].picture!),
+        );
+      },
+    );
   }
 
   Future<String> setFuture1() async {

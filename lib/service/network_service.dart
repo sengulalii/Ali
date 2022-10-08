@@ -6,9 +6,14 @@ class NetworkService {
   static const String _url = "https://randomuser.me/api/?";
 
   static Future getResults(int count, String path) async {
-    print("getResults");
-    var url = Uri.parse("${_url}$path=$count");
-    var response = await http.get(url);
-    return convert.jsonDecode(response.body) as Map<String, dynamic>;
+    try {
+      print("getResults");
+      var url = Uri.parse("${_url}$path=$count");
+      var response = await http.get(url);
+      return convert.jsonDecode(response.body) as Map<String, dynamic>;
+    } catch (e) {
+      //Sentry.sendException(path,username);
+      throw Exception("Network Error");
+    }
   }
 }

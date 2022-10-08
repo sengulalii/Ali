@@ -7,7 +7,7 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      picture: json['picture']["large"] as String?,
+      picture: json['picture']['large'] as String?,
     )..gender = $enumDecodeNullable(_$GenderEnumMap, json['gender']);
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
