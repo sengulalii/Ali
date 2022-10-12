@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:convert' as convert;
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../helper/page_helper.dart';
@@ -66,8 +63,16 @@ class _ContentPageState extends State<ContentPage> with PageHelper {
               ),
               IconButton(
                 onPressed: () {
-                  Provider.of<ContentViewModel>(context, listen: false)
-                      .get10Users();
+                  try {
+                    Provider.of<ContentViewModel>(context, listen: false)
+                        .get10Users();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Hata"),
+                      ),
+                    );
+                  }
                 },
                 icon: Icon(Icons.download),
               )
@@ -147,20 +152,6 @@ class _ContentPageState extends State<ContentPage> with PageHelper {
         );
       },
     );
-  }
-
-  Future<String> setFuture1() async {
-    var url = Uri.parse('https://randomuser.me/api/?results=1');
-
-    var response = await http.get(url);
-
-    late var jsonResponse;
-    if (response.statusCode == 200) {
-      jsonResponse = convert.jsonDecode(response.body) as Map<String, dynamic>;
-    } else {
-      jsonResponse = response.statusCode;
-    }
-    return jsonResponse.toString();
   }
 
   Widget resultWidget(AsyncSnapshot<String> snapshot) {

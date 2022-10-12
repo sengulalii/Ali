@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'model/user.dart';
 
 class ContentPage extends StatefulWidget {
@@ -17,8 +19,7 @@ class _ContentPageState extends State<ContentPage> {
 
   @override
   void initState() {
-    //setFuture1();
-    //setFuture2();
+    print("initState");
     super.initState();
   }
 
