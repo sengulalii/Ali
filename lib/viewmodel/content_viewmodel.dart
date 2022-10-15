@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zoom_ders1/helper/list_helper.dart';
 import 'package:zoom_ders1/service/dio_network_service.dart';
 
 import '../config/config.dart';
@@ -35,10 +36,10 @@ class ContentViewModel extends ChangeNotifier {
     if (statusMap[Services.users5] != ServiceStatus.idle) {
       return;
     }
-    users.clear();
-    statusMap[Services.users5] = ServiceStatus.idle;
 
-    notifyListeners();
+    statusMap[Services.users5] = ServiceStatus.idle;
+    clearUsers();
+
     late var jsonResponse;
     statusMap[Services.users5] = ServiceStatus.inProgress;
 
@@ -76,7 +77,7 @@ class ContentViewModel extends ChangeNotifier {
   }
 
   void clearUsers() {
-    users = [];
+    users = ListHelper.removeAllItems(users);
     notifyListeners();
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,22 +32,35 @@ class _HomePageState extends State<HomePage> with PageHelper {
         children: [
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  color = Colors.amber;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ContentPage(),
-                  ),
-                );
-              },
+              onPressed: () => onNavigationButtonPressed(),
               child: const Text('Sayfa 1 e git'),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void onNavigationButtonPressed() {
+    {
+      setState(() {
+        color = Colors.amber;
+      });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ContentPage(/** */),
+        ),
+      ).then((value) {
+        if (value is Color?) {
+          setState(() {
+            color = value ?? Colors.grey;
+          });
+        } else {
+          print("Farklı bir tip");
+        }
+      });
+    }
   }
 }

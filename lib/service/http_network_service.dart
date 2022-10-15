@@ -5,12 +5,12 @@ import 'package:zoom_ders1/service/abstract_network_service.dart';
 
 class HttpNetworkService implements AbstractNetworkService {
   @override
-  String? url = "https://random--user.me/api/?";
+  String? url = "https://randomuser.me/api/?";
 
   @override
   Future getResults(int count, String path) async {
     try {
-      if (count == 10) throw "ServiceError";
+      //if (count == 10) throw "ServiceError";
       print("getResults with Http");
       var url = Uri.parse("${this.url}$path=$count");
       var response = await http.get(url);

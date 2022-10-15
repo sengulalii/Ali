@@ -32,13 +32,26 @@ class _ContentPageState extends State<ContentPage> with PageHelper {
       onWillPop: () {
         Provider.of<ContentViewModel>(context, listen: false)
             .statusMap[Services.users5] = ServiceStatus.idle;
-        return Future.value(true);
+
+        return Future.value(false);
       },
       child: Scaffold(
           backgroundColor: color,
           appBar: AppBar(
             title: const Text('Geri Git'),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context, Colors.green);
+              },
+              icon: Icon(Icons.arrow_back_ios),
+            ),
             actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context, 4);
+                },
+                icon: Icon(Icons.arrow_back_ios),
+              ),
               IconButton(
                 onPressed: () {
                   setState(() {
